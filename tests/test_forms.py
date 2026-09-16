@@ -32,7 +32,9 @@ class FormTest(TestCase):
         try:
             validate_license_number(correct_license_number)
         except ValidationError:
-            self.fail("validate_license_number raised ValidationError unexpectedly!")
+            self.fail(
+                "validate_license_number "
+                "raised ValidationError unexpectedly!")
         self.assertTrue(validate_license_number(correct_license_number))
 
     def test_driver_validate_license_number_invalid(self):

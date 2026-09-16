@@ -49,7 +49,9 @@ class ManufacturerListView(LoginRequiredMixin, generic.ListView):
 
         name = self.request.GET.get("name", "")
 
-        context["search_form"] = ManufacturerSearchForm(initial={"name": name})
+        context["search_form"] = ManufacturerSearchForm(
+            initial={"name": name}
+        )
         return context
 
     def get_queryset(self):
@@ -131,7 +133,9 @@ class DriverListView(LoginRequiredMixin, generic.ListView):
 
         username = self.request.GET.get("username", "")
 
-        context["search_form"] = DriverSearchForm(initial={"username": username})
+        context["search_form"] = DriverSearchForm(
+            initial={"username": username}
+        )
         return context
 
     def get_queryset(self):
@@ -168,9 +172,11 @@ class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
 def toggle_assign_to_car(request, pk):
     driver = Driver.objects.get(id=request.user.id)
     if (
-        Car.objects.get(id=pk) in driver.cars.all()
+            Car.objects.get(id=pk) in driver.cars.all()
     ):  # probably could check if car exists
         driver.cars.remove(pk)
     else:
         driver.cars.add(pk)
-    return HttpResponseRedirect(reverse_lazy("taxi:car-detail", args=[pk]))
+    return HttpResponseRedirect(
+        reverse_lazy("taxi:car-detail", args=[pk])
+    )
