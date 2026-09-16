@@ -7,9 +7,12 @@ from taxi.models import Car, Manufacturer, Driver
 class ViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.manufacturer = Manufacturer.objects.create(name="Tesla", country="USA")
-        cls.driver = Driver.objects.create_user(username="John123", password="1234")
-        cls.car = Car.objects.create(model="Model S", manufacturer=cls.manufacturer)
+        cls.manufacturer = Manufacturer.objects.create(name="Tesla",
+                                                       country="USA")
+        cls.driver = Driver.objects.create_user(username="John123",
+                                                password="1234")
+        cls.car = Car.objects.create(model="Model S",
+                                     manufacturer=cls.manufacturer)
         cls.car.drivers.add(cls.driver)
 
         cls.url_index = reverse("taxi:index")
@@ -17,17 +20,22 @@ class ViewTest(TestCase):
         cls.url_manufacturer_list = reverse("taxi:manufacturer-list")
         cls.url_manufacturer_create = reverse("taxi:manufacturer-create")
         cls.url_manufacturer_update = reverse(
-            "taxi:manufacturer-update", kwargs={"pk": cls.manufacturer.pk}
+            "taxi:manufacturer-update",
+            kwargs={"pk": cls.manufacturer.pk}
         )
         cls.url_manufacturer_delete = reverse(
-            "taxi:manufacturer-delete", kwargs={"pk": cls.manufacturer.pk}
+            "taxi:manufacturer-delete",
+            kwargs={"pk": cls.manufacturer.pk}
         )
 
         cls.url_car_list = reverse("taxi:car-list")
-        cls.url_car_detail = reverse("taxi:car-detail", kwargs={"pk": cls.car.pk})
+        cls.url_car_detail = reverse("taxi:car-detail",
+                                     kwargs={"pk": cls.car.pk})
         cls.url_car_create = reverse("taxi:car-create")
-        cls.url_car_update = reverse("taxi:car-update", kwargs={"pk": cls.car.pk})
-        cls.url_car_delete = reverse("taxi:car-delete", kwargs={"pk": cls.car.pk})
+        cls.url_car_update = reverse("taxi:car-update",
+                                     kwargs={"pk": cls.car.pk})
+        cls.url_car_delete = reverse("taxi:car-delete",
+                                     kwargs={"pk": cls.car.pk})
 
         cls.url_driver_list = reverse("taxi:driver-list")
         cls.url_driver_detail = reverse(
@@ -80,7 +88,8 @@ class ViewTest(TestCase):
         Driver.objects.create_user(
             username="Alex123", license_number="ABC54321", password="1234"
         )
-        response = self.client.get(self.url_driver_list, {"username": "John"})
+        response = self.client.get(self.url_driver_list,
+                                   {"username": "John"})
 
         drivers_in_response = response.context["driver_list"]
 
@@ -88,12 +97,15 @@ class ViewTest(TestCase):
         self.assertEqual(drivers_in_response[0], self.driver)
 
         self.assertIn("search_form", response.context)
-        self.assertEqual(response.context["search_form"].initial["username"], "John")
+        self.assertEqual(response.context["search_form"].initial["username"],
+                         "John")
 
     def test_toggle_assign_to_car(self):
         self.client.login(username="John123", password="1234")
-        url = reverse("taxi:toggle-car-assign", kwargs={"pk": self.car.id})
-        expected_redirect_url = reverse("taxi:car-detail", kwargs={"pk": self.car.id})
+        url = reverse("taxi:toggle-car-assign",
+                      kwargs={"pk": self.car.id})
+        expected_redirect_url = reverse("taxi:car-detail",
+                                        kwargs={"pk": self.car.id})
         self.assertIn(self.car, self.driver.cars.all())
         response = self.client.get(url)
         self.assertRedirects(response, expected_redirect_url)
@@ -119,7 +131,8 @@ class ViewTest(TestCase):
         self.assertEqual(cars_in_response[0], self.car)
 
         self.assertIn("search_form", response.context)
-        self.assertEqual(response.context["search_form"].initial["model"], "S")
+        self.assertEqual(response.context["search_form"].initial["model"],
+                         "S")
 
     def test_manufacturer_view_get_queryset_and_get_context_data(self):
         self.client.login(username="John123", password="1234")
@@ -128,7 +141,8 @@ class ViewTest(TestCase):
             country="Ukraine",
         )
 
-        response = self.client.get(self.url_manufacturer_list, {"name": "Tesla"})
+        response = self.client.get(self.url_manufacturer_list,
+                                   {"name": "Tesla"})
 
         manufacturer_in_response = response.context["manufacturer_list"]
 
@@ -136,4 +150,5 @@ class ViewTest(TestCase):
         self.assertEqual(manufacturer_in_response[0], self.manufacturer)
 
         self.assertIn("search_form", response.context)
-        self.assertEqual(response.context["search_form"].initial["name"], "Tesla")
+        self.assertEqual(response.context["search_form"].initial["name"],
+                         "Tesla")
