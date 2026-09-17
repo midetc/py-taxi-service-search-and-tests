@@ -1,9 +1,7 @@
-from django.contrib.messages.api import success
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from django.urls import reverse
 
-from taxi.forms import CarForm, DriverCreationForm, validate_license_number
+from taxi.forms import DriverCreationForm, validate_license_number
 
 
 class FormTest(TestCase):
